@@ -3,11 +3,19 @@ package com.example.expandedlist;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -19,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 MyExpandableListAdapter expListAdapter;
 ExpandableListView expListView;
 List<String> listDataHeader;
+
 HashMap<String,List<String>> listDataChild;
 
     @Override
@@ -59,18 +68,51 @@ HashMap<String,List<String>> listDataChild;
                 Toast.makeText(MainActivity.this,
                         listDataHeader.get(listPos)+"->"+listDataChild.get(listDataHeader.get(listPos)).get(childPos),
                         Toast.LENGTH_SHORT).show();
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(listDataHeader.get(listPos));
                 builder.setMessage(listDataChild.get(listDataHeader.get(listPos)).get(childPos));
                 builder.setIcon(R.mipmap.ic_launcher_round);
                 builder.setCancelable(true);
 
                 AlertDialog dialog = builder.create();
+
                 //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //style id
                 dialog.show();
+                */
 
+                // ********************************custom dialog**************************
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.dialog);
 
+                // set the custom dialog components - text, image and button
+                TextView text1 = dialog.findViewById(R.id.titleText);
+                text1.setText(listDataHeader.get(listPos));
+                TextView text2 = dialog.findViewById(R.id.text);
+                text2.setText(listDataChild.get(listDataHeader.get(listPos)).get(childPos));
+                ImageView image =  dialog.findViewById(R.id.image);
+                image.setImageResource(R.mipmap.ic_launcher_round);
 
+                Button dialogButton =  dialog.findViewById(R.id.dialogButtonOK);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                //RotateAnimation anim = new RotateAnimation(0f, 350f, 15f, 15f);
+                ScaleAnimation anim=new ScaleAnimation(0.1f,1f,0.1f,1f);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setRepeatCount(Animation.ABSOLUTE);
+                anim.setDuration(2000);
+
+                // Start animating the image
+
+                dialog.show();
+                image.startAnimation(anim);
+                // Later.. stop the animation
+                //image.setAnimation(null);
                 return false;
             }
         });
