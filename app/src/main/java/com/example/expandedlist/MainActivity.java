@@ -29,6 +29,14 @@ HashMap<String,List<String>> listDataChild;
         prepareListData();
         expListAdapter= new MyExpandableListAdapter(this,listDataHeader,listDataChild);
         expListView.setAdapter(expListAdapter);
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int listPos, long id) {
+                Toast.makeText(MainActivity.this, listDataHeader.get(listPos)+" List Clicked", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
         expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override

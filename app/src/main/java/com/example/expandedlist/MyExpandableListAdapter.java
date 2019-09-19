@@ -77,6 +77,7 @@ class MyExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int listPos, int expandedListPos, boolean isLastChild, View convertView, ViewGroup parent) {
         final String expandedListText =(String)getChild(listPos,expandedListPos);
+      //  final int countryImage=(int)
         if(convertView==null)
         {
             LayoutInflater layoutInflater=(LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
