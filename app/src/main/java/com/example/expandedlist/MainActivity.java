@@ -1,5 +1,6 @@
 package com.example.expandedlist;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -29,6 +30,8 @@ HashMap<String,List<String>> listDataChild;
         prepareListData();
         expListAdapter= new MyExpandableListAdapter(this,listDataHeader,listDataChild);
         expListView.setAdapter(expListAdapter);
+
+        //*******************step 3*****************************
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int listPos, long id) {
@@ -44,22 +47,34 @@ HashMap<String,List<String>> listDataChild;
                 Toast.makeText(MainActivity.this, listDataHeader.get(listPos)+" List Expanded", Toast.LENGTH_SHORT).show();
             }
         });
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View view, int listPos, int childPos, long id) {
-                Toast.makeText(MainActivity.this,
-                        listDataHeader.get(listPos)+"->"+listDataChild.get(listDataHeader.get(listPos)).get(childPos),
-                        Toast.LENGTH_SHORT).show();
-
-                return false;
-            }
-        });
         expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int listPos) {
                 Toast.makeText(MainActivity.this,  listDataHeader.get(listPos)+" List Collapsed", Toast.LENGTH_SHORT).show();
             }
         });
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View view, int listPos, int childPos, long id) {
+                Toast.makeText(MainActivity.this,
+                        listDataHeader.get(listPos)+"->"+listDataChild.get(listDataHeader.get(listPos)).get(childPos),
+                        Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(listDataHeader.get(listPos));
+                builder.setMessage(listDataChild.get(listDataHeader.get(listPos)).get(childPos));
+                builder.setIcon(R.mipmap.ic_launcher_round);
+                builder.setCancelable(true);
+
+                AlertDialog dialog = builder.create();
+                //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //style id
+                dialog.show();
+
+
+
+                return false;
+            }
+        });
+
 
     }
 
